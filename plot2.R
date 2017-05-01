@@ -2,13 +2,8 @@
 dataURL <- "https://d396qusza40orc.cloudfront.net/exdata%2Fdata%2Fhousehold_power_consumption.zip"
 filename <- "Household_power_consumption.zip"
 datafile <- "household_power_consumption.txt"
-
-if (!file.exists(filename)){
-  download.file(dataURL, filename, method="curl")
-}  
-if (!file.exists("household_power_consumption.txt")) { 
-  unzip(filename) 
-}
+if (!file.exists(filename)){download.file(dataURL, filename, method="curl")}  
+if (!file.exists("household_power_consumption.txt")) {unzip(filename)}
 HHPowConsumption <- read.table(file = datafile, header = TRUE,sep = ";",na.strings = "?", stringsAsFactors = FALSE, dec = ".")
 HHPowConsumption$Date <- as.Date(HHPowConsumption$Date, format = "%d/%m/%Y")
 
@@ -19,3 +14,8 @@ rm(HHPowConsumption)
 ## Converting the Dates
 DatetoRDate <- paste(as.Date(HHPowCon$Date),HHPowCon$Time)
 HHPowCon$DateTime <- as.POSIXct(DatetoRDate)
+
+## Plot 2
+png("plot2.png", width = 480, height = 480) ## Sets the graphic device to PNG and creates the file
+with(HHPowCon, plot(DateTime, Global_active_power, type="l", xlab="", ylab="Global Active Power (kilowatts)"))
+dev.off()
